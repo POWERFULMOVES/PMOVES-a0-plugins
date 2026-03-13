@@ -1,0 +1,10 @@
+title: PMOVES.Notes Integration
+description: Persistent note-taking integration with PMOVES.AI Open Notebook. Auto-saves conversation summaries and reasoning traces with NATS event publishing.
+github: https://github.com/POWERFULMOVES/a0-plugin-pmoves-notes
+tags:
+  - pmoves
+  - notes
+  - persistence
+  - open-notebook
+  - memory
+  - nats
