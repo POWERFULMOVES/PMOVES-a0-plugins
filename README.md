@@ -125,3 +125,79 @@ Use tags from [`TAGS.md`](./TAGS.md) where possible (recommended: up to 5 tags):
 By contributing to this repository, you agree that your submission must not contain malicious content.
 
 If we detect malicious behavior (including but not limited to malware, credential theft, obfuscation intended to hide harmful behavior, or supply-chain attacks), the submission will be removed and **we will report it** to the relevant platforms and/or authorities. **Legal action may be taken if needed.**
+
+---
+
+# PMOVES.AI Edition
+
+This is the **PMOVES.AI-Edition-Hardened** fork of [agent0ai/a0-plugins](https://github.com/agent0ai/a0-plugins), customized for the PMOVES.AI multi-agent orchestration platform.
+
+## PMOVES.AI Plugin Requirements
+
+Plugins indexed in this PMOVES.AI fork must follow additional integration patterns beyond the upstream requirements:
+
+### Service Integration Patterns
+
+- **TensorZero Gateway**: All LLM/embedding calls must use TensorZero Gateway (port 3030 host, 3000 container)
+  - Format: `tensorzero::<model>::<variant>`
+  - Never call OpenAI/Anthropic APIs directly
+
+- **NATS Message Bus**: Event-driven coordination via authenticated NATS
+  - URL: `nats://nats:pmoves@nats:4222`
+  - Subjects follow versioned pattern: `<domain>.<event>.v<version>` (e.g., `agent.task.completed.v1`)
+
+- **Hi-RAG v2**: Knowledge retrieval via hybrid RAG system
+  - API: `POST http://localhost:8086/hirag/query`
+  - Combines: Qdrant (vectors) + Neo4j (graph) + Meilisearch (full-text)
+
+- **Archon**: Prompt management and form storage
+  - API: `http://localhost:8091`
+  - Connects via Agent Zero's MCP API
+
+### Security Hardening
+
+All plugins must follow PMOVES.AI security patterns:
+
+- **Non-root containers**: `USER pmoves:pmoves` (UID/GID 65532)
+- **Health checks**: All services expose `/healthz` endpoint
+- **Metrics**: Prometheus `/metrics` endpoint for observability
+- **Credentials**: Never hardcode secrets; use environment variables or CHIT encoding
+- **CHIT signatures**: Support CGP payload validation for agent coordination
+
+### PMOVES.AI Services Catalog
+
+| Service | Port | Purpose |
+|---------|------|---------|
+| TensorZero Gateway | 3030 (host) / 3000 (container) | LLM gateway with observability |
+| Hi-RAG v2 | 8086 (CPU) / 8087 (GPU) | Hybrid knowledge retrieval |
+| NATS | 4222 | Event-driven message bus |
+| Archon | 8091 | Agent prompt management |
+| Agent Zero | 8080 | Control-plane orchestrator |
+| Neo4j | 7474 (HTTP) / 7687 (Bolt) | Knowledge graph |
+| Cipher Memory | 8096 | Persistent agent memory |
+
+## Contributing to PMOVES.AI Edition
+
+1. Fork this repository: `POWERFULMOVES/PMOVES-a0-plugins`
+2. Create plugin repository with `plugin.yaml` at root
+3. Add `index.yaml` entry in `plugins/<your-plugin>/` folder
+4. Submit PR to **PMOVES.AI-Edition-Hardened** branch
+
+### Plugin Template
+
+```yaml
+# plugins/my-plugin/index.yaml
+title: "My PMOVES.AI Plugin"
+description: "Integrates with PMOVES.AI services"
+github: https://github.com/POWERFULMOVES/a0-plugin-my-plugin
+tags:
+  - pmoves
+  - tensorzero
+  - nats
+```
+
+## Branch Strategy
+
+- **Main branch**: `PMOVES.AI-Edition-Hardened` (tracked by PMOVES.AI submodule)
+- **Upstream sync**: Periodically merge from `agent0ai/a0-plugins` main branch
+- **PMOVES-specific plugins**: Only in this fork, not upstream
