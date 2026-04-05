@@ -1,42 +1,39 @@
-# PMOVES.AI Integration — Agent Zero Plugins
+# PMOVES.AI Integration Dossier
 
-## Role in PMOVES.AI
+_Last updated: 2026-04-04_
 
-This repository is the **community plugin index** for Agent Zero, surfaced within PMOVES.AI's agent orchestration layer. It provides:
+## Module
+- Name: PMOVES-a0-plugins
+- Path: PMOVES-a0-plugins
 
-- **Plugin discovery** — Curated index of Agent Zero plugins available to all PMOVES.AI agents
-- **Capability extension** — Plugins extend Agent Zero's tool repertoire beyond core MCP tools
-- **Community contributions** — Third-party plugins vetted through CI validation and human review
+## Purpose in PMOVES.AI
+- Agent Zero plugin extensions and custom tool integrations.
 
-## Service Integration
+## PMOVES Overlay Surface
+- pmoves-integrations/ overlay path (if used): _TBD_
+- Compose/profile wiring: _TBD_
+- Env/secret inputs: _TBD_
+- Auth/JWT requirements: _TBD_
 
-Agent Zero (port 8080) loads plugins from this index at startup. Plugins are referenced by their `index.yaml` entries, which point to external repositories.
+## Contracts and Topics
+- NATS subjects (if any): _TBD_
+- Supabase schema/tables touched (if any): _TBD_
+- MCP endpoints/skills (if any): _TBD_
 
-| Service | Port | Purpose |
-|---------|------|---------|
-| Agent Zero API | 8080 | Plugin host / orchestrator |
-| Agent Zero UI | 8081 | Plugin management interface |
+## Boot Order and Health
+- Bring-up dependency order: _TBD_
+- Health endpoints: _TBD_
+- Smoke targets: _TBD_
 
-## Plugin Structure
+## Hardening Notes
+- Image pinning / provenance: _TBD_
+- Secrets source (*_FILE / vault / GH env): _TBD_
+- Network/security policy constraints: _TBD_
 
-Each plugin is a folder containing:
-- `index.yaml` — Plugin metadata pointing to its source repository
-- Optional thumbnail (`.png`, `.jpg`, `.webp`, max 20KB)
+## Source Documentation
+- Upstream docs entrypoint: README.md
+- PMOVES docs index reference: pmoves/docs/SUBMODULE_DOCS_DOSSIER.md
 
-## Usage in PMOVES.AI
-
-Plugins are loaded by Agent Zero during orchestration. The PMOVES.AI agent team configuration (`pmoves/configs/agent-teams.yaml`) references plugin capabilities when assigning tasks to agents.
-
-## Health Check
-
-Plugin availability is verified through Agent Zero's health endpoint:
-
-```bash
-curl http://localhost:8080/healthz
-```
-
-## Security Notes
-
-- Plugins execute within Agent Zero's sandbox — no direct host access
-- Plugin submissions require CI validation + human review before merge
-- MCP tool allowlisting should be configured per-agent (see Phase C audit notes)
+## Owner / Audit
+- Owning lane: _TBD_
+- Last integration audit run: 2026-04-04
