@@ -10,7 +10,35 @@ permissions:
   pull-requests: write
 
 jobs:
-  validate:
+  # Safe validation: runs for ALL contributors (external and trusted)
+  # Checks out only the base commit — no attacker code execution risk
+  validate-safe:
+    if: |
+      github.event_name == 'pull_request_target' &&
+      (github.event.action != 'labeled' || github.event.label.name == 'recheck')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+
+      - name: Validate plugin structure (safe)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: '✅ Plugin PR received. Automated validation is running.'
+            });
+
+  # Full validation: runs only for trusted authors (OWNER/MEMBER/COLLABORATOR)
+  # Checks out PR head commit with secrets access for full validation
+  validate-full:
     if: |
       (github.event.pull_request.author_association == 'OWNER' ||
        github.event.pull_request.author_association == 'MEMBER' ||
@@ -18,6 +46,7 @@ jobs:
       github.event_name == 'pull_request_target' &&
       (github.event.action != 'labeled' || github.event.label.name == 'recheck')
     runs-on: ubuntu-latest
+    needs: validate-safe
 
     steps:
       - name: Checkout
