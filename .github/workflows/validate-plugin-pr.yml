@@ -11,13 +11,19 @@ permissions:
 
 jobs:
   validate:
-    if: ${{ github.event_name == 'pull_request_target' && (github.event.action != 'labeled' || github.event.label.name == 'recheck') }}
+    if: |
+      (github.event.pull_request.author_association == 'OWNER' ||
+       github.event.pull_request.author_association == 'MEMBER' ||
+       github.event.pull_request.author_association == 'COLLABORATOR') &&
+      github.event_name == 'pull_request_target' &&
+      (github.event.action != 'labeled' || github.event.label.name == 'recheck')
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.base.sha }}
           fetch-depth: 0
 
       - name: Create bot app token
