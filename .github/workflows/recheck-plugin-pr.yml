@@ -17,6 +17,7 @@ jobs:
       - name: Create bot app token
         id: bot-app-token
         uses: actions/create-github-app-token@v1
+        if: ${{ secrets.A0_BOT_APP_ID != '' }}
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
           owner: ${{ github.repository_owner }}
@@ -24,10 +25,21 @@ jobs:
             a0-plugins
           private-key: ${{ secrets.A0_BOT_PRIVATE_KEY }}
 
+      - name: Set fallback token
+        id: fallback-token
+        if: ${{ steps.bot-app-token.outputs.token == '' }}
+        run: echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+
+      - name: Resolve API token
+        id: api-token
+        run: |
+          TOKEN="${{ steps.bot-app-token.outputs.token || steps.fallback-token.outputs.token }}"
+          echo "token=${TOKEN}" >> $GITHUB_OUTPUT
+
       - name: Toggle recheck label on PR
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.bot-app-token.outputs.token }}
+          github-token: ${{ steps.api-token.outputs.token }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
