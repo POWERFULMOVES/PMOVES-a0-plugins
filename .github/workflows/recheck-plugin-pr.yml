@@ -23,8 +23,8 @@ jobs:
             echo "has_app=false" >> "$GITHUB_OUTPUT"
           fi
         env:
-          APP_ID: ${{{{ secrets.A0_BOT_APP_ID }}}}
-          APP_KEY: ${{{{ secrets.A0_BOT_PRIVATE_KEY }}}}
+          APP_ID: $${{ secrets.A0_BOT_APP_ID }}}}
+          APP_KEY: $${{ secrets.A0_BOT_PRIVATE_KEY }}}}
       - name: Create bot app token
         id: bot-app-token
         uses: actions/create-github-app-token@v1
