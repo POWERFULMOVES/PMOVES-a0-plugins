@@ -14,10 +14,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check GitHub App auth availability
+        id: check-app-auth
+        run: |
+          if [ -n "$APP_ID" ] && [ -n "$APP_KEY" ]; then
+            echo "has_app=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_app=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          APP_ID: ${{{{ secrets.A0_BOT_APP_ID }}}}
+          APP_KEY: ${{{{ secrets.A0_BOT_PRIVATE_KEY }}}}
       - name: Create bot app token
         id: bot-app-token
         uses: actions/create-github-app-token@v1
-        if: ${{ secrets.A0_BOT_APP_ID != '' }}
+        if: steps.check-app-auth.outputs.has_app == 'true'
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
           owner: ${{ github.repository_owner }}
