@@ -29,6 +29,7 @@ jobs:
         id: bot-app-token
         uses: actions/create-github-app-token@v1
         if: steps.check-app-auth.outputs.has_app == 'true'
+        continue-on-error: true
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
           owner: ${{ github.repository_owner }}
