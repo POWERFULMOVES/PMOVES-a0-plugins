@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   update:
+    if: ${{ secrets.A0_BOT_APP_ID != '' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -23,9 +24,21 @@ jobs:
       - name: Create bot app token
         id: bot-app-token
         uses: actions/create-github-app-token@v1
+        if: ${{ secrets.A0_BOT_APP_ID != '' }}
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
           private-key: ${{ secrets.A0_BOT_PRIVATE_KEY }}
+
+      - name: Set fallback token
+        id: fallback-token
+        if: ${{ steps.bot-app-token.outputs.token == '' }}
+        run: echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+
+      - name: Resolve API token
+        id: api-token
+        run: |
+          TOKEN="${{ steps.bot-app-token.outputs.token || steps.fallback-token.outputs.token }}"
+          echo "token=${TOKEN}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,21 +47,21 @@ jobs:
 
       - name: Download index.json from tagged Release
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
           INDEX_RELEASE_TAG: generated-index
         run: |
           python scripts/download_index_release.py
 
       - name: Scan repo stats (write repo_stats_updates.json)
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
           STARS_CHUNK_SIZE: "50"
         run: |
           python scripts/update_index_stars.py --mode scan
 
       - name: Refresh index.json from tagged Release
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
           INDEX_RELEASE_TAG: generated-index
         run: |
           python scripts/download_index_release.py
@@ -59,7 +72,7 @@ jobs:
 
       - name: Publish updated index.json to Release (replace asset)
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
           INDEX_RELEASE_TAG: generated-index
         run: |
           python scripts/publish_index_release.py
