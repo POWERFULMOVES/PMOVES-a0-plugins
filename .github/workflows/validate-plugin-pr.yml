@@ -58,6 +58,7 @@ jobs:
       - name: Create bot app token
         id: bot-app-token
         uses: actions/create-github-app-token@v1
+        if: ${{ secrets.A0_BOT_APP_ID != '' }}
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
           owner: ${{ github.repository_owner }}
@@ -65,11 +66,22 @@ jobs:
             a0-plugins
           private-key: ${{ secrets.A0_BOT_PRIVATE_KEY }}
 
+      - name: Set fallback token
+        id: fallback-token
+        if: ${{ steps.bot-app-token.outputs.token == '' }}
+        run: echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+
+      - name: Resolve API token
+        id: api-token
+        run: |
+          TOKEN="${{ steps.bot-app-token.outputs.token || steps.fallback-token.outputs.token }}"
+          echo "token=${TOKEN}" >> $GITHUB_OUTPUT
+
       - name: Resolve PR metadata
         id: pr_meta
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.bot-app-token.outputs.token }}
+          github-token: ${{ steps.api-token.outputs.token }}
           script: |
             const pr = context.payload.pull_request;
             const shouldRun = !pr.draft;
@@ -131,7 +143,7 @@ jobs:
         env:
           COMMENT_BODY: ${{ steps.validate_submission.outputs.comment_body }}
         with:
-          github-token: ${{ steps.bot-app-token.outputs.token }}
+          github-token: ${{ steps.api-token.outputs.token }}
           script: |
             await github.rest.issues.createComment({
               owner: context.repo.owner,
