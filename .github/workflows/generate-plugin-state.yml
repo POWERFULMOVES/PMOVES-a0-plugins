@@ -54,9 +54,21 @@ jobs:
       - name: Create bot app token
         id: bot-app-token
         uses: actions/create-github-app-token@v1
+        if: ${{ secrets.A0_BOT_APP_ID != '' }}
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
           private-key: ${{ secrets.A0_BOT_PRIVATE_KEY }}
+
+      - name: Set fallback token
+        id: fallback-token
+        if: ${{ steps.bot-app-token.outputs.token == '' }}
+        run: echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+
+      - name: Resolve API token
+        id: api-token
+        run: |
+          TOKEN="${{ steps.bot-app-token.outputs.token || steps.fallback-token.outputs.token }}"
+          echo "token=${TOKEN}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -71,7 +83,7 @@ jobs:
       - name: Download current index.json (best effort)
         continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
           INDEX_RELEASE_TAG: generated-index
         run: |
           python scripts/download_index_release.py
@@ -80,7 +92,7 @@ jobs:
         if: ${{ github.event.inputs.cleanup_orphans == 'true' }}
         id: orphan_names
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
         run: |
           names="$(python scripts/find_orphan_plugin_names.py)"
           echo "plugin_names=${names}" >> "$GITHUB_OUTPUT"
@@ -88,7 +100,7 @@ jobs:
 
       - name: Sync plugin state
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
           MAX_PLUGINS: ${{ github.event.inputs.max_plugins || '1000' }}
           START_FROM: ${{ github.event.inputs.start_from || '0' }}
           PLUGIN_NAMES: ${{ github.event.inputs.cleanup_orphans == 'true' && steps.orphan_names.outputs.plugin_names || github.event.inputs.plugin_names || '' }}
@@ -99,7 +111,7 @@ jobs:
 
       - name: Publish index.json to Release (replace asset)
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.api-token.outputs.token }}
           INDEX_RELEASE_TAG: generated-index
         run: |
           python scripts/publish_index_release.py
