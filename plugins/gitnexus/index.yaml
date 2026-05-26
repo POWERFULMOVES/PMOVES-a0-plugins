@@ -1,0 +1,7 @@
+title: GitNexus
+description: Code-graph queries for Agent Zero via the GitNexus MCP server — dependency and impact/blast-radius analysis, symbol callers, route/tool maps, and Cypher queries over indexed repositories. Auto-installs the gitnexus CLI and registers it as an MCP server.
+github: https://github.com/King0James0/a0-gitnexus-plugin
+tags:
+  - tools
+  - integration
+  - search
