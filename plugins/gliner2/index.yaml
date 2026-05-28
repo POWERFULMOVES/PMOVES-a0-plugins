@@ -1,0 +1,9 @@
+title: gliner2
+description: Gliner2 is a direct `gliner2_extract` tool for entities, classification, JSON extraction, and relations. A framework extension that can replace eligible memory utility-model calls with GLiNER2 entity extraction and exposes framework hooks for memory keyword extraction and knowledge metadata enrichment.
+github: https://github.com/a0-community-plugins/gliner2
+tags:
+  - tools
+  - memory
+  - agents
+  - integration
+  - development
