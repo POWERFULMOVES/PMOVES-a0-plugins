@@ -1,5 +1,5 @@
 title: KAME — API Rotation & Stability Engine
-description: High-availability API-key rotation for Agent Zero. KAME tracks the health of each provider and model, predicts rate limits, and rotates keys before you hit 429s. It honors real retryDelay hints, rests daily-exhausted keys for a full cooldown, escalates gently through 503 outages, and waits out downtime instead of burning requests — keeping long agent runs alive across multiple free LLM providers.
+description: KAME rotates API keys to avoid 429 errors, cooldown exhausted keys, respect retry delays, and route around provider outages during long agent runs.
 github: https://github.com/Kame696/kame-api-engine
 tags:
   - api
