@@ -20,6 +20,7 @@ Use short, lowercase tags. Prefer existing tags from this list. Recommended: up 
 - `embeddings`
 - `rag`
 - `agents`
+- `monologue`
 
 ## Search / Retrieval
 
@@ -36,6 +37,7 @@ Use short, lowercase tags. Prefer existing tags from this list. Recommended: up 
 - `web`
 - `webhooks`
 - `oauth`
+- `ui`
 
 ## Data / Databases
 
@@ -73,6 +75,7 @@ Use short, lowercase tags. Prefer existing tags from this list. Recommended: up 
 - `cli`
 - `monitoring`
 - `docker`
+- `framework`
 
 ## Media
 

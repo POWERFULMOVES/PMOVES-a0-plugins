@@ -1,0 +1,9 @@
+title: MCP2CLI
+description: Token-efficient CLI bridge to any MCP server. Configure servers as disabled in Agent Zero settings to prevent context pollution, then discover and call tools on demand — saving 96-99% of tokens vs native MCP schema injection.
+github: https://github.com/vanja-emichi/a0-mcp2cli
+tags:
+  - tools
+  - api
+  - cli
+  - integration
+  - development

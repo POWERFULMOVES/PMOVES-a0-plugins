@@ -1,0 +1,12 @@
+title: Facebook Pages
+description: >-
+  Manage Facebook Pages via the Graph API v21.0: create text, link, and
+  scheduled posts; read feeds and comments; moderate comments (reply, hide,
+  delete); upload photos; track page and post analytics; view page info and
+  managed pages list.
+github: https://github.com/spinnakergit/a0-facebook
+tags:
+  - social-media
+  - facebook
+  - marketing
+  - analytics

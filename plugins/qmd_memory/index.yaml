@@ -1,0 +1,10 @@
+title: QMD Memory System
+description: File-based structured memory system using QMD hybrid search engine for markdown-based persistent memory. Replaces FAISS vector store with human-readable category files.
+github: https://github.com/aivismayzaveri/qmd_memory
+tags:
+  - memory
+  - llm
+  - agents
+  - tools
+  - integration
+

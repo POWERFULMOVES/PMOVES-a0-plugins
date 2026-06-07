@@ -1,0 +1,9 @@
+title: BMAD Method
+description: Full software development lifecycle framework for Agent Zero. Provides 20 specialist agents (analyst, architect, developer, QA, UX designer, scrum master, and more) across 4 modules — BMM, BMB, CIS, and TEA — with an interactive status dashboard and workflow-driven project management.
+github: https://github.com/vanja-emichi/bmad_method
+tags:
+  - agents
+  - workflow
+  - automation
+  - llm
+  - development

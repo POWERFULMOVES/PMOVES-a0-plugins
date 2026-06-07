@@ -1,0 +1,8 @@
+title: Matrix Chat Integration
+description: Chat with Agent Zero via Matrix protocol. Persistent bridge bot with restricted and elevated modes, rate limiting, and prompt injection defense.
+github: https://github.com/filhote98-bit/a0-matrix-chat
+tags:
+  - integration
+  - automation
+  - agents
+  - tools

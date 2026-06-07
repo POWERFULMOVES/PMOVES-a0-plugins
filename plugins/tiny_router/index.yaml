@@ -1,0 +1,11 @@
+title: Tiny Router
+description: Pre-classify every message in <10ms with a local DeBERTa-v3-small ONNX model (44M params). Routes low-value messages (thanks, ok, got it) away from the LLM — saving 30-50% on API costs at zero latency cost.
+github: https://github.com/Nunezchef/a0_tinyRouter
+tags:
+  - llm
+  - automation
+  - agents
+  - prompting
+screenshots:
+  - https://raw.githubusercontent.com/Nunezchef/a0_tinyRouter/main/docs/screenshot.png
+  - https://raw.githubusercontent.com/Nunezchef/a0_tinyRouter/main/docs/banner.jpg
