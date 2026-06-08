@@ -1,0 +1,9 @@
+title: Chat Rename
+description: Rename chats from the sidebar and keep manual titles locked against automatic renaming.
+github: https://github.com/3clyp50/a0_chat_rename
+tags:
+  - workflow
+  - tools
+screenshots:
+  - https://raw.githubusercontent.com/3clyp50/a0_chat_rename/main/screenshots/01.png
+  - https://raw.githubusercontent.com/3clyp50/a0_chat_rename/main/screenshots/02.png

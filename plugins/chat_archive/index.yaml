@@ -1,0 +1,7 @@
+title: Chat Archive
+description: Archive chats to hide them from sidebar, view archived chats in a modal, and drag to reorder chats with persistent custom ordering.
+github: https://github.com/mbradaschia/a0-chat-archive
+tags:
+  - ui
+  - productivity
+  - sidebar

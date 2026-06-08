@@ -1,0 +1,7 @@
+title: Stop Process
+description: Adds a Stop button to the chat input actions bar to cancel/abort the currently running agent process and return to idle. Unlike Pause (which suspends) or Nudge (which restarts), Stop fully terminates the process.
+github: https://github.com/mbradaschia/a0-stop-process
+tags:
+  - ui
+  - productivity
+  - chat

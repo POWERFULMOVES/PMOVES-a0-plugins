@@ -1,0 +1,8 @@
+title: Resizable Sidebar
+description: Adds a draggable resize handle to the left sidebar, allowing users to adjust its width. Width persists across page refreshes via localStorage.
+github: https://github.com/nicolasleao/a0-resizable-sidebar-plugin
+tags:
+  - workflow
+  - tools
+screenshots:
+  - https://raw.githubusercontent.com/nicolasleao/a0-resizable-sidebar-plugin/refs/heads/main/screenshots/01.png

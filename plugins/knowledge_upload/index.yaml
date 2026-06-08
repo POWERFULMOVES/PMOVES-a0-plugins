@@ -1,0 +1,7 @@
+title: Knowledge Upload
+description: Adds a Knowledge button to the chat input area for quick access to the file browser, enabling easy management of knowledge files with automatic reindexing. Project aware.
+github: https://github.com/mbradaschia/a0-knowledge-upload
+tags:
+  - memory
+  - files
+  - rag

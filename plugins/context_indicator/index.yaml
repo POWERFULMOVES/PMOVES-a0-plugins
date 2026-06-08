@@ -1,0 +1,7 @@
+title: Context Window Indicator
+description: Shows real-time context window usage percentage with color-coded badge in the chat UI bar. Tracks tokens via tiktoken and updates after each agent response cycle.
+github: https://github.com/nibaldox/context_indicator
+tags:
+  - tools
+  - development
+  - llm

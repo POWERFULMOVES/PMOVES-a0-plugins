@@ -1,0 +1,8 @@
+title: Signal Integration
+description: Secure messaging via Signal with E2E encryption. Send and receive messages, manage groups, and use Signal as a real-time chat bridge to Agent Zero.
+github: https://github.com/spinnakergit/a0-signal
+tags:
+  - security
+  - communication
+  - integration
+  - automation

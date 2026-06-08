@@ -14,6 +14,7 @@ from plugin_resolution import INDEX_YAML_NAME, PLUGINS_DIR, REPO_ROOT, PluginRes
 INDEX_JSON_PATH = REPO_ROOT / "index.json"
 AUTHORS_DIR = REPO_ROOT / "authors"
 ALLOWED_IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
+GENERATED_THUMBNAILS_DIR = REPO_ROOT / "generated" / "thumbnails"
 DISCUSSIONS_CATEGORY_NAME = "Plugins"
 DISCUSSION_MARKER = "<!-- a0-plugins-discussion -->"
 PLUGIN_MARKER_PREFIX = "<!-- a0-plugins-plugin:"
@@ -249,6 +250,9 @@ def _thumbnail_rel_path(plugin_name: str) -> str | None:
         p = plugin_dir / f"thumbnail{ext}"
         if p.exists():
             return p.relative_to(REPO_ROOT).as_posix()
+    generated_thumbnail = GENERATED_THUMBNAILS_DIR / plugin_name / "thumbnail.jpg"
+    if generated_thumbnail.exists():
+        return generated_thumbnail.relative_to(REPO_ROOT).as_posix()
     return None
 
 
@@ -348,13 +352,9 @@ def _upsert_index_plugin(index: dict[str, Any], plugin_name: str, entry: dict[st
         if isinstance(existing.get("version"), str) and not isinstance(entry.get("version"), str):
             entry["version"] = existing.get("version")
         existing_commit = existing.get("commit")
-        if not isinstance(existing_commit, str) or not existing_commit:
-            existing_commit = existing.get("latest_commit") if isinstance(existing.get("latest_commit"), str) else None
         if isinstance(existing_commit, str) and existing_commit and not isinstance(entry.get("commit"), str):
             entry["commit"] = existing_commit
         existing_updated = existing.get("updated")
-        if not isinstance(existing_updated, str) or not existing_updated:
-            existing_updated = existing.get("latest_commit_timestamp") if isinstance(existing.get("latest_commit_timestamp"), str) else None
         if isinstance(existing_updated, str) and existing_updated and not isinstance(entry.get("updated"), str):
             entry["updated"] = existing_updated
     plugins[plugin_name] = entry

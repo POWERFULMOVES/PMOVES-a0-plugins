@@ -1,0 +1,7 @@
+title: Background Changer
+description: Set a custom background image for the Agent Zero UI. Upload any image to use as a backdrop across the homepage and all chat views, with opacity, blur, and fit mode controls.
+github: https://github.com/agkonnect/agent-zero-background-changer
+tags:
+  - ui
+  - web
+  - tools

@@ -1,0 +1,7 @@
+title: Chat Status Marklet
+description: Visual status indicators for sidebar chat items. Pulsing blue dot for running processes, solid green dot for finished but unseen results. Unseen marks clear when chat is selected.
+github: https://github.com/mbradaschia/a0-chat-status-marklet
+tags:
+  - ui
+  - productivity
+  - sidebar

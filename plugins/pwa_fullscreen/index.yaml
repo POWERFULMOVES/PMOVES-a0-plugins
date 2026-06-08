@@ -1,0 +1,7 @@
+title: PWA Fullscreen
+description: Adds iOS PWA meta tags and a fullscreen toggle button so Agent Zero fills the entire mobile screen — hides the browser address bar and Android system navigation bar.
+github: https://github.com/Snoxer/a0-pwa-fullscreen
+tags:
+  - ui
+  - mobile
+  - pwa

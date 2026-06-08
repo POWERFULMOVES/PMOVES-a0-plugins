@@ -1,0 +1,11 @@
+title: Audit Trail
+description: >-
+  Track every agent task with cost estimates, token counts, tool call logs,
+  and duration. Dashboard with daily, weekly, and monthly cost breakdowns,
+  filtering, and CSV/JSON export. Per-project SQLite storage.
+github: https://github.com/Animus-Systems/agent0-plugin-audit-trail
+tags:
+  - monitoring
+  - sqlite
+  - automation
+  - workflow

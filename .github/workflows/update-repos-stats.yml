@@ -1,9 +1,5 @@
 name: Update Index Stars & Repo Stats (auto)
 
-concurrency:
-  group: index-release-publisher
-  cancel-in-progress: false
-
 on:
   schedule:
     - cron: "17 * * * *" # hourly
@@ -26,6 +22,15 @@ jobs:
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
           private-key: ${{ secrets.A0_BOT_PRIVATE_KEY }}
+
+      - name: Wait for older index-mutating workflows
+        env:
+          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: |
+          python scripts/wait_for_index_serialization.py
 
       - name: Set up Python
         uses: actions/setup-python@v5
