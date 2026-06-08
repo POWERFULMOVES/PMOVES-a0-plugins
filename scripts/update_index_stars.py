@@ -94,7 +94,7 @@ def _extract_plugin_version(plugin_yaml_text: str) -> str | None:
     return version or None
 
 
-def _extract_latest_commit(repo_obj: dict[str, Any]) -> tuple[str, str] | None:
+def _extract_commit_info(repo_obj: dict[str, Any]) -> tuple[str, str] | None:
     default_branch_ref = repo_obj.get("defaultBranchRef")
     if not isinstance(default_branch_ref, dict):
         return None
@@ -197,9 +197,9 @@ def _scan_and_write_updates(chunk_size: int, updates_path: Path) -> int:
                 "stars": stars,
                 "repo": f"{owner}/{repo}",
             }
-            latest_commit = _extract_latest_commit(repo_obj)
-            if latest_commit is not None:
-                commit_sha, updated = latest_commit
+            commit_info = _extract_commit_info(repo_obj)
+            if commit_info is not None:
+                commit_sha, updated = commit_info
                 updates[plugin_name]["commit"] = commit_sha
                 updates[plugin_name]["updated"] = updated
             plugin_yaml_obj = repo_obj.get("object")
@@ -242,17 +242,11 @@ def _apply_updates(updates_path: Path) -> int:
         if isinstance(version, str) and version:
             entry["version"] = version
         commit = upd.get("commit")
-        if not isinstance(commit, str) or not commit:
-            commit = upd.get("latest_commit") if isinstance(upd.get("latest_commit"), str) else None
         if isinstance(commit, str) and commit:
             entry["commit"] = commit
-            entry.pop("latest_commit", None)
         updated = upd.get("updated")
-        if not isinstance(updated, str) or not updated:
-            updated = upd.get("latest_commit_timestamp") if isinstance(upd.get("latest_commit_timestamp"), str) else None
         if isinstance(updated, str) and updated:
             entry["updated"] = updated
-            entry.pop("latest_commit_timestamp", None)
         applied += 1
 
     _save_index(index)

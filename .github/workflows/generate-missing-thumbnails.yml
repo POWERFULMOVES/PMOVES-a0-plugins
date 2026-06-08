@@ -1,0 +1,135 @@
+name: Generate Missing Thumbnails
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "plugins/**"
+      - "generated/thumbnails/**"
+  workflow_dispatch:
+    inputs:
+      max_generated_thumbnails:
+        description: "Max number of missing thumbnails to actually generate"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Create bot app token
+        id: bot-app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.A0_BOT_APP_ID }}
+          private-key: ${{ secrets.A0_BOT_PRIVATE_KEY }}
+
+      - name: Wait for older index-mutating workflows
+        env:
+          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: |
+          python scripts/wait_for_index_serialization.py
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml pillow requests
+
+      - name: Download current index.json (best effort)
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          INDEX_RELEASE_TAG: generated-index
+        run: |
+          python scripts/download_index_release.py
+
+      - name: Generate missing thumbnails
+        env:
+          MAX_GENERATED_THUMBNAILS: ${{ github.event.inputs.max_generated_thumbnails || '' }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          python scripts/generate_missing_thumbnails.py
+
+      - name: Commit generated thumbnails
+        env:
+          BOT_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          git config user.name "a0-bot"
+          git config user.email "bot@agent0.ai"
+          git add generated/thumbnails
+          if git diff --cached --quiet; then
+            echo "No generated thumbnail changes to commit."
+            exit 0
+          fi
+          git commit -m "Generate missing plugin thumbnails"
+          git push "https://x-access-token:${BOT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${REF_NAME}"
+
+      - name: Resolve affected plugin names
+        id: affected_plugins
+        env:
+          BEFORE_SHA: ${{ github.event.before || '' }}
+          AFTER_SHA: ${{ github.sha }}
+        run: |
+          names=$(python - <<'PY'
+          import os
+          import subprocess
+          from pathlib import Path
+
+          before = os.environ.get("BEFORE_SHA", "").strip()
+          after = os.environ.get("AFTER_SHA", "").strip() or "HEAD"
+          if before and set(before) != {"0"}:
+              cmd = ["git", "diff", "--name-only", f"{before}..{after}"]
+          else:
+              cmd = ["git", "ls-tree", "-r", "--name-only", after, "--", "plugins", "generated/thumbnails"]
+          raw = subprocess.check_output(cmd).decode("utf-8", errors="replace")
+          names = set()
+          for line in raw.splitlines():
+              path = Path(line.strip())
+              parts = path.parts
+              if len(parts) >= 2 and parts[0] == "plugins":
+                  names.add(parts[1])
+              elif len(parts) >= 3 and parts[0] == "generated" and parts[1] == "thumbnails":
+                  names.add(parts[2])
+          print(",".join(sorted(names)))
+          PY
+          )
+          echo "plugin_names=${names}" >> "$GITHUB_OUTPUT"
+          echo "Affected plugins: ${names}"
+
+      - name: Sync plugin state
+        env:
+          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          MAX_PLUGINS: "1000"
+          START_FROM: "0"
+          PLUGIN_NAMES: ${{ steps.affected_plugins.outputs.plugin_names }}
+          BEFORE_SHA: ${{ github.event.before || '' }}
+          AFTER_SHA: ${{ github.sha }}
+        run: |
+          python scripts/sync_plugin_state.py
+
+      - name: Publish index.json to Release (replace asset)
+        env:
+          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          INDEX_RELEASE_TAG: generated-index
+        run: |
+          python scripts/publish_index_release.py

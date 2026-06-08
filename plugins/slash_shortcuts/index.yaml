@@ -1,0 +1,11 @@
+title: Shortcuts
+description: Scope-aware slash shortcuts for composing reusable prompts with optional arguments and multi-shortcut expansion in the Agent Zero chat box.
+github: https://github.com/walodayeet/Shortcuts
+tags:
+  - workflow
+  - development
+  - automation
+screenshots:
+  - https://raw.githubusercontent.com/walodayeet/Shortcuts/main/screenshots/01.png
+  - https://raw.githubusercontent.com/walodayeet/Shortcuts/main/screenshots/02.png
+  - https://raw.githubusercontent.com/walodayeet/Shortcuts/main/screenshots/03.png

@@ -1,0 +1,8 @@
+title: AutoResearch
+description: Autonomous code optimization experiment loop. Generates hypotheses, edits code, runs benchmarks, evaluates results, and iterates until convergence.
+github: https://github.com/juanmackie/autoresearch-a0
+tags:
+  - optimization
+  - benchmarking
+  - experiments
+  - performance

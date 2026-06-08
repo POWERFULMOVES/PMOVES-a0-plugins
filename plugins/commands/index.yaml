@@ -1,0 +1,11 @@
+title: Commands
+description: YAML-configured slash commands with text templates or Python hooks, plus an included skill that can create or update command files for you.
+github: https://github.com/3clyp50/commands
+tags:
+  - prompting
+  - workflow
+  - tools
+  - files
+screenshots:
+  - https://raw.githubusercontent.com/3clyp50/commands/main/screenshots/1.png
+  - https://raw.githubusercontent.com/3clyp50/commands/main/screenshots/2.png
