@@ -1,0 +1,12 @@
+title: AgentEvolver Self-Improvement
+description: Implements AgentEvolver's three self-evolving mechanisms (Self-Questioning, Self-Navigating, Self-Attributing) for autonomous agent improvement in Agent Zero.
+github: https://github.com/kgvo/agentevolver_self_improvement
+tags:
+  - ai-agents
+  - self-improvement
+  - machine-learning
+  - agent-framework
+  - tools
+# Optional: Add up to 5 screenshot URLs (full images, not thumbnails)
+# screenshots:
+#   - https://raw.githubusercontent.com/kgvo/agentevolver_self_improvement/main/docs/screenshot1.png

@@ -1,0 +1,7 @@
+title: Browser Model Override
+description: Use a dedicated LLM for Agent Zero's bundled browser agent while keeping the main chat model unchanged.
+github: https://github.com/jedruch/a0-browser-model-override
+tags:
+  - llm
+  - browser
+  - development

@@ -1,0 +1,15 @@
+title: YouTube Manager
+description: >-
+  Manage YouTube channels end-to-end via the Data API v3: upload videos with
+  metadata and thumbnails; search videos, channels, and playlists; read video
+  details and channel statistics; manage comments (list, add, reply, delete);
+  create and organize playlists; track analytics; and extract transcripts.
+  Supports API key for public read operations or OAuth 2.0 with PKCE for full
+  channel access.
+github: https://github.com/spinnakergit/a0-youtube
+tags:
+  - social-media
+  - youtube
+  - video
+  - content
+  - analytics

@@ -1,0 +1,11 @@
+title: NotebookLM
+description: Integrate Google NotebookLM into Agent Zero. Select notebooks, ask questions grounded in your sources, and generate artifacts — audio, video, quizzes, flashcards, mind maps, reports, and more.
+github: https://github.com/mbradaschia/notebooklm
+tags:
+  - llm
+  - agents
+  - rag
+  - documents
+  - google
+screenshots:
+  - https://raw.githubusercontent.com/mbradaschia/notebooklm/main/icon.png

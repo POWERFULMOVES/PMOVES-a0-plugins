@@ -1,0 +1,9 @@
+title: Context Engine
+description: Hybrid code search and RAG integration via Context Engine MCP services.
+github: https://github.com/a0-community-plugins/context_engine.git
+tags:
+  - context
+  - memory
+  - retrieval
+  - RAG
+  - search

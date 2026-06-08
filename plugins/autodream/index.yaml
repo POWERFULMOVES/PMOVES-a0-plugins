@@ -1,0 +1,8 @@
+title: AutoDream
+description: Reflective memory maintenance on top of the builtin FAISS Vector DB. Make your agent dream and remember your projects and goals.
+github: https://github.com/3clyp50/autodream
+tags:
+  - memory
+  - agents
+  - workflow
+  
