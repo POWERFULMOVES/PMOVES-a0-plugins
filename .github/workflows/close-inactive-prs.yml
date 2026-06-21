@@ -1,8 +1,11 @@
 name: Close Inactive PRs (auto)
 
 on:
-  schedule:
-    - cron: "17 4 * * *" # daily
+  # PMOVES.AI fork: marketplace-operator automation disabled (see
+  # update-repos-stats.yml for rationale). The fork has no community plugin PR
+  # queue to triage; re-enable only if PMOVES operates its own plugin index.
+  # schedule:
+  #   - cron: "17 4 * * *" # daily
   workflow_dispatch:
 
 permissions:
