@@ -55,8 +55,13 @@ jobs:
           ref: ${{ github.event.pull_request.base.sha }}
           fetch-depth: 0
 
+      # PMOVES.AI fork: the bot App key may be absent/invalid here. Make token
+      # minting non-fatal and fall back to the default GITHUB_TOKEN below so the
+      # verify gate still runs (the validation itself only needs github.token;
+      # the App token is used solely for posting PR comments as the bot).
       - name: Create bot app token
         id: bot-app-token
+        continue-on-error: true
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.A0_BOT_APP_ID }}
@@ -69,7 +74,7 @@ jobs:
         id: pr_meta
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.bot-app-token.outputs.token }}
+          github-token: ${{ steps.bot-app-token.outputs.token || github.token }}
           script: |
             const pr = context.payload.pull_request;
             const shouldRun = !pr.draft;
@@ -106,7 +111,7 @@ jobs:
         if: ${{ steps.pr_meta.outputs.should_run == 'true' }}
         continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.bot-app-token.outputs.token || github.token }}
           INDEX_RELEASE_TAG: generated-index
         run: |
           python scripts/download_index_release.py
@@ -140,7 +145,7 @@ jobs:
         env:
           COMMENT_BODY: ${{ steps.validate_submission.outputs.comment_body }}
         with:
-          github-token: ${{ steps.bot-app-token.outputs.token }}
+          github-token: ${{ steps.bot-app-token.outputs.token || github.token }}
           script: |
             await github.rest.issues.createComment({
               owner: context.repo.owner,
