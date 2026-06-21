@@ -1,8 +1,15 @@
 name: Update Index Stars & Repo Stats (auto)
 
 on:
-  schedule:
-    - cron: "17 * * * *" # hourly
+  # PMOVES.AI fork: marketplace-operator automation disabled.
+  # This fork is a plugin authoring/staging area; PMOVES contributes plugins
+  # upstream to agent0ai/a0-plugins (where the index bot runs) and verifies
+  # locally via the a0-review-plugin skill. The hourly schedule failed on every
+  # run because A0_BOT_PRIVATE_KEY is not a valid GitHub App PEM on this fork
+  # (Invalid keyData). Re-enable the schedule only after supplying a valid App
+  # key if PMOVES decides to operate its own private plugin index.
+  # schedule:
+  #   - cron: "17 * * * *" # hourly
   workflow_dispatch:
 
 permissions:
