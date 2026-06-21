@@ -1,11 +1,15 @@
 name: Generate Plugin State
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "plugins/**"
-      - "authors/**"
+  # PMOVES.AI fork: marketplace-operator automation disabled (see
+  # update-repos-stats.yml for rationale). Auto-trigger on plugins/** pushes is
+  # off so index edits on this staging fork do not spawn failing runs (the bot
+  # App key is invalid here). Run manually via workflow_dispatch if needed.
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "plugins/**"
+  #     - "authors/**"
   workflow_dispatch:
     inputs:
       max_plugins:
