@@ -114,7 +114,20 @@ def main() -> int:
         f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{urllib.parse.quote(tag)}"
     )
     if not rel:
-        _fail(f"Release tag '{tag}' not found. Generate/publish index.json first.")
+        # Fork posture: this fork does not publish the generated-index release
+        # (the index bot runs upstream). Fall back to the PUBLIC upstream
+        # release so plugin validation still has an index to validate against.
+        fallback_full = os.environ.get("INDEX_FALLBACK_REPO", "agent0ai/a0-plugins")
+        fb_owner, _, fb_repo = fallback_full.partition("/")
+        if fb_owner and fb_repo:
+            rel = _request_json_allow_404(
+                f"https://api.github.com/repos/{fb_owner}/{fb_repo}/releases/tags/{urllib.parse.quote(tag)}"
+            )
+        if not rel:
+            _fail(
+                f"Release tag '{tag}' not found locally or in {fallback_full}. "
+                "Generate/publish index.json first."
+            )
 
     assets = rel.get("assets")
     if not isinstance(assets, list):
