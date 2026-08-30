@@ -156,6 +156,17 @@ jobs:
 
       - name: Fail workflow if validation failed
         if: ${{ steps.validate_submission.outcome == 'failure' }}
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          COMMENT_BODY: ${{ steps.validate_submission.outputs.comment_body }}
         run: |
           echo "Plugin submission validation failed"
+          # Sync PRs (upstream merges from sync/* branches) legitimately touch
+          # files outside plugins/ — the plugin-submission policy does not
+          # apply to them. validate-full already only runs for trusted
+          # authors (OWNER/MEMBER/COLLABORATOR).
+          if [[ "$HEAD_REF" == sync/* ]]              && printf '%s' "$COMMENT_BODY" | grep -q "Only files under plugins/ are allowed"; then
+            echo "Sync PR detected; plugin-submission policy waived (trusted author, sync/* branch)."
+            exit 0
+          fi
           exit 1
