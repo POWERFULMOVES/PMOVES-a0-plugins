@@ -1,0 +1,7 @@
+title: PMOVES Coding Agents
+description: Delegate coding from Agent Zero to the fleet coding-agent CLIs (hermes, crush, opencode, codex) with headless runs, captured output, and CHIT-signed results.
+github: https://github.com/POWERFULMOVES/Pmoves-a0-plugin-pmoves-coding-agents
+tags:
+  - tools
+  - integration
+  - development
